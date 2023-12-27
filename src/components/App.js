@@ -10,7 +10,9 @@ import Questions from "./Questions";
 const initialState = {
   questions: [],
   status: "loading",
-  index:0
+  index: 0,
+  answer: null,
+  points: 0,
 };
 
 function reducer(state, action) {
@@ -30,6 +32,16 @@ function reducer(state, action) {
       return {
         ...state,
         status: "active",
+      };
+    case "newAnswer":
+      return {
+        ...state,
+        answer: action.payload,
+      };
+    case "addPoint":
+      return {
+        ...state,
+        points: action.points + action.payload,
       };
     default:
       throw new Error("Actoin unKnown");
@@ -54,8 +66,14 @@ export default function App() {
         {state.status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {state.status === "active" && <Questions question={state.questions[state.index]}/>}
-         
+        {state.status === "active" && (
+          <Questions
+            question={state.questions[state.index]}
+            dispatch={dispatch}
+            answer={state.answer}
+            points={state.points}
+          />
+        )}
       </Main>
     </div>
   );
